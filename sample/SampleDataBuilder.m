@@ -162,6 +162,7 @@
 
 
     QRadioElement *radioElement = [[QRadioElement alloc] initWithItems:[[NSArray alloc] initWithObjects:@"Option 1", @"Option 2", @"Option 3",@"Option 11", @"Option 12", @"Option 13", @"Option 21", @"Option 22", @"Option 33", @"Option 41", @"Option 42", @"Option 43", @"Option 51", @"Option 52", @"Option 53", @"Option 61", @"Option 62", @"Option 63", @"Option 71", @"Option 72", @"Option 73", nil] selected:7 title:@"Radio"];
+    radioElement.itemsImageNames = @[ @"intel", @"iPhone", @"intel", @"iPhone", @"intel", @"iPhone", @"intel", @"iPhone", @"intel", @"iPhone", @"intel", @"iPhone", @"intel", @"iPhone", @"intel", @"iPhone", @"intel", @"iPhone", @"intel", @"iPhone", @"intel" ];
 	radioElement.key = @"radio1";
 
 
@@ -218,8 +219,8 @@
 	QButtonElement *button = [[QButtonElement alloc] initWithTitle:@"Show form values"];
 	button.onSelected = ^{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Hello"
-            message:[NSString stringWithFormat:@"1: %d\n2: %@\n3: %d\n4:%@\n5:%f\n6:%@\n7:%@",
-                radioElement.selected ,
+            message:[NSString stringWithFormat:@"1: %ld\n2: %@\n3: %d\n4:%@\n5:%f\n6:%@\n7:%@",
+                (long)radioElement.selected ,
                 entryElement.textValue,
                 boolElement.boolValue,
                 dateElement.dateValue ,
@@ -300,7 +301,7 @@
 
     QRadioSection *section2 = [[QRadioSection alloc] initWithItems:[NSArray arrayWithObjects:@"Football", @"Soccer", @"Formula 1", nil] selected:0 title:@"Sport"];
     __weak QRadioSection *_section2 = section2;
-    section2.onSelected = ^{ NSLog(@"selected index: %d", _section2.selected); };
+    section2.onSelected = ^{ NSLog(@"selected index: %ld", (long)_section2.selected); };
     [root addSection:section2];
 
     return root;
@@ -458,6 +459,10 @@
     b1.image = [UIImage imageNamed:@"intel"];
     [secImg addElement:b1];
 
+    QLabelElement *b4 = [[QLabelElement alloc] initWithTitle:@"Processor processor processor processor processor processor processor" Value:nil];
+    b4.image = [UIImage imageNamed:@"intel"];
+    [secImg addElement:b4];
+
     QLabelElement *b2 = [[QLabelElement alloc] initWithTitle:@"iPhone" Value:@"OK"];
     b2.image = [UIImage imageNamed:@"iPhone"];
     [secImg addElement:b2];
@@ -472,8 +477,8 @@
     QSection *sec = [[QSection alloc] initWithTitle:@"Jazzin.."];
     [badge3 addSection:sec];
 
-    QBadgeElement *b4 = [[QBadgeElement alloc] initWithTitle:@"With a really really really long title" Value:@"YEAH"];
-    [s2 addElement:b4];
+    QBadgeElement *b5 = [[QBadgeElement alloc] initWithTitle:@"With a really really really long title" Value:@"YEAH"];
+    [s2 addElement:b5];
 
     [s2 addElement:badge3];
     [sec addElement:[[QBadgeElement alloc] initWithTitle:@"Test" Value:@"0"]];
@@ -578,7 +583,19 @@
 
     [root addSection:multilineSection];
     [root addSection:traitsSection];
-    
+
+    QSection *imageSection = [[QSection alloc] initWithTitle:@"With images"];
+    QEntryElement *regularEntryElementWithImage = [[QEntryElement alloc] initWithTitle:@"Entry with image" Value:@"" Placeholder:@"YES"];
+    regularEntryElementWithImage.image = [UIImage imageNamed:@"keyboard"];
+    [imageSection addElement:regularEntryElementWithImage];
+    QMultilineElement *multilineWithImage = [QMultilineElement new];
+    multilineWithImage.title = @"Multiline with image";
+    multilineWithImage.image = [UIImage imageNamed:@"iPhone"];
+    [imageSection addElement:multilineWithImage];
+
+    [root addSection:imageSection];
+
+
     return root;
 }
 
@@ -592,6 +609,7 @@
 
     QSortingSection *sortingSection = [[QSortingSection alloc] init];
     sortingSection.key = @"sortedSection";
+    sortingSection.canDeleteRows = YES;
     [sortingSection addElement:[[QLabelElement alloc] initWithTitle:@"First" Value:@"1"]];
     [sortingSection addElement:[[QLabelElement alloc] initWithTitle:@"Second" Value:@"2"]];
     [sortingSection addElement:[[QLabelElement alloc] initWithTitle:@"Third" Value:@"3"]];

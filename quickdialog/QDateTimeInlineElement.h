@@ -14,6 +14,7 @@
 
 #import "QuickDialogTableView.h"
 #import "QEntryElement.h"
+#import "QDateEntryTableViewCell.h"
 
 @interface QDateTimeInlineElement : QEntryElement {
     NSDate * _dateValue;
@@ -36,6 +37,7 @@
 
 @property(nonatomic, strong) NSDate *minimumDate;
 
+@property(nonatomic) BOOL showPickerInCell;
 
 - (QDateTimeInlineElement *)initWithDate:(NSDate *)date andMode:(UIDatePickerMode)mode;
 

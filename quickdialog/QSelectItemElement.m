@@ -6,6 +6,13 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+
+#import "QuickDialogController.h"
+#import <UIKit/UIKit.h>
+#import "QSelectItemElement.h"
+#import "QAppearance.h"
+#import "QElement+Appearance.h"
+
 @implementation QSelectItemElement {
     UIImage *_checkmarkImage;
 }
@@ -25,7 +32,9 @@
 }
 
 -(void)setCheckmarkImageNamed:(NSString *)name {
-    self.checkmarkImage = [UIImage imageNamed:name];
+    if(name != nil) {
+        self.checkmarkImage = [UIImage imageNamed:name];
+    }
 }
 
 - (UITableViewCell *)getCellForTableView:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller

@@ -12,6 +12,9 @@
 // permissions and limitations under the License.
 //
 
+#import "QImageElement.h"
+#import "QEntryElement.h"
+#import "QuickDialogController+Navigation.h"
 #import "QImageTableViewCell.h"
 
 @interface QImageElement () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPopoverControllerDelegate>
@@ -54,8 +57,10 @@
 }
 
 - (void)setImageValueNamed:(NSString *)name {
-    self.imageValue = [UIImage imageNamed:name];
-    [self reducedImageIfNeeded];
+    if(name != nil) {
+        self.imageValue = [UIImage imageNamed:name];
+        [self reducedImageIfNeeded];
+    }
 }
 
 - (UITableViewCell *)getCellForTableView:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller {

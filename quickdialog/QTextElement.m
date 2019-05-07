@@ -14,6 +14,8 @@
 
 #import <CoreGraphics/CoreGraphics.h>
 #import "QTextElement.h"
+#import "QAppearance.h"
+#import "QElement+Appearance.h"
 
 @implementation QTextElement
 
@@ -47,6 +49,8 @@
     cell.detailTextLabel.font = self.appearance.valueFont;
     cell.detailTextLabel.textColor = _color;
     cell.detailTextLabel.text = _text;
+
+    cell.imageView.image = _image;
 
     return cell;
 }

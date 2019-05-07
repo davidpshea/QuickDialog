@@ -6,6 +6,7 @@
 
 
 #import "QFlatAppearance.h"
+#import "QSection.h"
 
 
 @implementation QFlatAppearance {
@@ -48,9 +49,11 @@
     self.cellBorderWidth = 14;
     
 #if __IPHONE_7_0
-    self.valueFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    self.labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-    self.entryFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    if ([UIFont respondsToSelector:@selector(preferredFontForTextStyle:)]) {
+        self.valueFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        self.labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        self.entryFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    }
 #endif
     
 }
@@ -67,5 +70,10 @@
     [super cell:cell willAppearForElement:element atIndexPath:path];
 }
 
+- (CGFloat)heightForHeaderInSection:(QSection *)section andTableView:(QuickDialogTableView *)tableView andIndex:(NSInteger)index {
+    if (section.headerView!=nil)
+        return section.headerView.bounds.size.height;
+    return [super heightForHeaderInSection:section andTableView:tableView andIndex:index];
+}
 
 @end

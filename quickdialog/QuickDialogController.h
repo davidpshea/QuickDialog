@@ -12,6 +12,7 @@
 // permissions and limitations under the License.
 //
 
+#import "QElement.h"
 #import "QuickDialogTableView.h"
 
 @class QRootElement;
@@ -50,6 +51,11 @@
 - (QuickDialogController *)controllerForRoot:(QRootElement *)root;
 
 + (QuickDialogController *)controllerForRoot:(QRootElement *)root;
+
+/**
+ Called before a cell is removed from the tableView. Return YES and QuickDialog will delete the cell, return NO if you want to delete the cell or reload the tableView yourself.
+*/
+- (BOOL)shouldDeleteElement:(QElement *)element;
 
 + (UINavigationController *)controllerWithNavigationForRoot:(QRootElement *)root;
 

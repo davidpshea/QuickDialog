@@ -12,17 +12,14 @@
 // permissions and limitations under the License.
 //
 
+#import "QAppearance.h"
 #import "QEntryTableViewCell.h"
 #import "QDateEntryTableViewCell.h"
 #import "QDateTimeInlineElement.h"
-#import "QTextField.h"
-
-UIDatePicker *QDATEENTRY_GLOBAL_PICKER;
+#import "QElement+Appearance.h"
 
 @implementation QDateEntryTableViewCell
 
-@synthesize pickerView = _pickerView;
-@synthesize centeredLabel = _centeredLabel;
 
 
 - (QDateEntryTableViewCell *)init {
@@ -32,11 +29,6 @@ UIDatePicker *QDATEENTRY_GLOBAL_PICKER;
 		self.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
     return self;
-}
-
-+ (UIDatePicker *)getPickerForDate {
-    QDATEENTRY_GLOBAL_PICKER = [[UIDatePicker alloc] init];
-    return QDATEENTRY_GLOBAL_PICKER;
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -49,7 +41,18 @@ UIDatePicker *QDATEENTRY_GLOBAL_PICKER;
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     QDateTimeInlineElement *const element = ((QDateTimeInlineElement *) _entryElement);
 
-    _pickerView = [QDateEntryTableViewCell getPickerForDate];
+    [self prepareDateTimePicker:element];
+
+    _textField.inputView = _pickerView;
+    [super textFieldDidBeginEditing:textField];
+    self.selected = YES;
+}
+
+- (void)prepareDateTimePicker:(QDateTimeInlineElement * const)element
+{
+    if (!_pickerView)
+        _pickerView = [[UIDatePicker alloc] init];
+
     _pickerView.timeZone = [NSTimeZone localTimeZone];
     [_pickerView sizeToFit];
     [_pickerView addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
@@ -62,15 +65,12 @@ UIDatePicker *QDATEENTRY_GLOBAL_PICKER;
         _pickerView.date = element.dateValue;
     else if (element.mode == UIDatePickerModeCountDownTimer && element.ticksValue != nil)
         _pickerView.countDownDuration = [element.ticksValue doubleValue];
-
-    _textField.inputView = _pickerView;
-    [super textFieldDidBeginEditing:textField];
-    self.selected = YES;
 }
 
 - (void)createSubviews {
     [super createSubviews];
     _textField.hidden = YES;
+    _textField.userInteractionEnabled = NO;
 
     self.centeredLabel = [[UILabel alloc] init];
     self.centeredLabel.highlightedTextColor = [UIColor whiteColor];

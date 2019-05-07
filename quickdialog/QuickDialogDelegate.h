@@ -12,16 +12,20 @@
 // permissions and limitations under the License.
 //
 
-#import "QLabelElement.h"
+#import <UIKit/UIKit.h>
 
-/**
-  QButtonElement: centered title that looks like a button.
-*/
+@class QElement;
+@class QSection;
 
-@interface QButtonElement : QLabelElement
+@protocol QuickDialogDelegate  <NSObject>
 
-- (QButtonElement *)init;
 
-- (QButtonElement *)initWithTitle:(NSString *)title;
+@optional
+
+-(void) cell:(UITableViewCell *)cell willAppearForElement:(QElement *)element atIndexPath:(NSIndexPath *)indexPath;
+
+-(void) header:(UIView *)header willAppearForSection:(QSection *)section atIndex:(NSInteger)indexPath;
+-(void) footer:(UIView *)footer willAppearForSection:(QSection *)section atIndex:(NSInteger)indexPath;
 
 @end
+

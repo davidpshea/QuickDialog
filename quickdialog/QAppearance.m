@@ -1,17 +1,10 @@
+#import "QAppearance.h"
+#import <UIKit/UIKit.h>
+#import "QSection.h"
 
 @implementation QAppearance {
 
 }
-
-@synthesize sectionTitleFont = _sectionTitleFont;
-@synthesize sectionTitleColor = _sectionTitleColor;
-@synthesize sectionFooterFont = _sectionFooterFont;
-@synthesize sectionFooterColor = _sectionFooterColor;
-@synthesize entryAlignment = _entryAlignment;
-@synthesize buttonAlignment = _buttonAlignment;
-@synthesize selectedBackgroundView = _selectedBackgroundView;
-@synthesize sectionTitleShadowColor = _sectionTitleShadowColor;
-
 
 - (QAppearance *)init {
     self = [super init];
@@ -77,12 +70,16 @@
 - (CGFloat)heightForHeaderInSection:(QSection *)section andTableView:(QuickDialogTableView *)tableView andIndex:(NSInteger)index {
     if (section.headerView!=nil)
         return section.headerView.frame.size.height;
+    if (self.defaultHeightForHeader!=nil)
+        return self.defaultHeightForHeader.floatValue;
     return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)heightForFooterInSection:(QSection *)section andTableView:(QuickDialogTableView *)tableView andIndex:(NSInteger)index {
     if (section.footerView!=nil)
         return section.footerView.frame.size.height;
+    if (self.defaultHeightForFooter!=nil)
+        return self.defaultHeightForFooter.floatValue;
 
     return UITableViewAutomaticDimension;
 }

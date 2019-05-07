@@ -14,6 +14,11 @@
 
 #import "QuickDialogTableView.h"
 #import "QuickDialog.h"
+#import "QuickDialogDelegate.h"
+
+@interface QuickDialogTableView ()
+@property(weak, nonatomic, readwrite) QuickDialogController *controller;
+@end
 
 @implementation QuickDialogTableView {
     BOOL _deselectRowWhenViewAppears;
@@ -29,15 +34,16 @@
 - (QuickDialogTableView *)initWithController:(QuickDialogController *)controller {
     self = [super initWithFrame:CGRectMake(0, 0, 0, 0) style:controller.root.grouped ? UITableViewStyleGrouped : UITableViewStylePlain];
     if (self!=nil){
-        _controller = controller;
-        self.root = _controller.root;
+        self.controller = controller;
         self.deselectRowWhenViewAppears = YES;
 
-        quickDialogDataSource = [[QuickDialogDataSource alloc] initForTableView:self];
-        self.dataSource = quickDialogDataSource;
+        self.quickDialogDataSource = [[QuickDialogDataSource alloc] initForTableView:self];
+        self.dataSource = self.quickDialogDataSource;
 
-        quickDialogDelegate = [[QuickDialogTableDelegate alloc] initForTableView:self];
-        self.delegate = quickDialogDelegate;
+        self.quickDialogTableDelegate = [[QuickDialogTableDelegate alloc] initForTableView:self];
+        self.delegate = self.quickDialogTableDelegate;
+
+        self.root = _controller.root;
 
         self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     }
@@ -47,7 +53,7 @@
 -(void)setRoot:(QRootElement *)root{
     _root = root;
     for (QSection *section in _root.sections) {
-        if (section.needsEditing == YES){
+        if (section.needsEditing){
             [self setEditing:YES animated:YES];
             self.allowsSelectionDuringEditing = YES;
         }
@@ -106,7 +112,10 @@
 - (UITableViewCell *)cellForElement:(QElement *)element {
     if (element.hidden)
         return nil;
-    return [self cellForRowAtIndexPath:[element getIndexPath]];
+    UITableViewCell *cell = [self cellForRowAtIndexPath:[element getIndexPath]];
+    cell.accessibilityLabel = element.accessibilityLabel;
+    cell.accessibilityIdentifier = cell.accessibilityIdentifier;
+    return cell;
 }
 
 - (void)deselectRows
@@ -127,7 +136,7 @@
     NSMutableArray *indexes = [[NSMutableArray alloc] init];
     QElement * element = firstElement;
     while (element != nil) {
-        if (!element.hidden)
+        if (!element.hidden && !element.parentSection.hidden)
             [indexes addObject:element.getIndexPath];
         element = va_arg(args, QElement *);
     }
@@ -137,4 +146,17 @@
 }
 
 
+- (void)reloadRowHeights
+{
+    [self beginUpdates];
+    [self endUpdates];
+}
+
+- (void)endEditingOnVisibleCells
+{
+    for (UITableViewCell *cell in self.visibleCells)
+        if (cell.isEditing)
+            [cell endEditing:YES];
+
+}
 @end

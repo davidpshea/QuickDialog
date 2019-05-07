@@ -14,6 +14,8 @@
 
 #import "QuickDialogController.h"
 #import "QRootElement.h"
+#import "QEntryElement.h"
+
 @interface QuickDialogController ()
 
 + (Class)controllerClassForRoot:(QRootElement *)root;
@@ -79,6 +81,15 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if(self) {
+        self.resizeWhenKeyboardPresented =YES;
+    }
+    return self;
 }
 
 - (QuickDialogController *)initWithRoot:(QRootElement *)rootElement {
@@ -148,6 +159,9 @@
     return [QuickDialogController buildControllerWithClass:controllerClass root:root];
 }
 
+- (BOOL)shouldDeleteElement:(QElement *)element{
+    return YES;
+}
 
 - (void) resizeForKeyboard:(NSNotification*)aNotification {
     if (!_viewOnScreen)
